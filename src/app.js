@@ -1,22 +1,15 @@
-//const express = require('express')
-//const app = express();
-const { connectionPool } = require('./utils/database');
+const express = require('express');
+const bodyParser = require('body-parser');
+const taxRateRoutes = require('./routesAndControllers/taxRatesApi');
+const branchesRoutes = require('./routesAndControllers/salesBranchesApi');
+const operationsRoutes = require('./routesAndControllers/operationsApi');
+const clientsRoutes = require('./routesAndControllers/clientsApi');
+const app = express();
 
-console.log('should work')
+app.use('/api', bodyParser.json());
+app.use('/api', taxRateRoutes);
+app.use('/api', branchesRoutes);
+app.use('/api', operationsRoutes);
+app.use('/api', clientsRoutes);
 
-connectionPool.execute('SELECT * FROM TAX_RATES').then((results) => {
-    console.log(results[0]);
-    return connectionPool.end();
-}).then(() => {
-    console.log('connection ended');
-}).catch((err) => {
-    console.log('err:' + err);
-});
-
-
-
-// app.use((req, res, next) => {
-//     res.send('Działa');
-// });
-
-// app.listen(4580);
+app.listen(4580);
