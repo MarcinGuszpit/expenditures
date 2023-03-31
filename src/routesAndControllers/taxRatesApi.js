@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllTaxRates } = require('./../model/taxRates');
+const { getAllTaxRates } = require('../model/taxRates');
 const router = express.Router();
 
 
