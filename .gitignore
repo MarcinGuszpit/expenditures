@@ -2,8 +2,6 @@
 .vscode
 bower_components
 resources
-settings/**.*
-settings.js
 
 ### Node template
 # Logs
@@ -44,3 +42,4 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
