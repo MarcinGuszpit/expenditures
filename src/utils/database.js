@@ -1,9 +1,10 @@
 const mysql = require('mysql2');
+const {dataBaseURL, dataBaseUser, dataBasePassword, dataBaseName} = require("../settings/settings");
 const pool = mysql.createPool({
-    host: '192.168.1.151',
-    user: 'expend_user',
-    password: 'cp2BqlM0bggvraRBEpN2',
-    database: 'Expenditures',
+    host: dataBaseURL,
+    user: dataBaseUser,
+    password: dataBasePassword,
+    database: dataBaseName,
 });
 
 module.exports = {

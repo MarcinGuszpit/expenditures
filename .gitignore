@@ -2,6 +2,7 @@
 .vscode
 bower_components
 resources
+settings\**.*
 
 ### Node template
 # Logs
