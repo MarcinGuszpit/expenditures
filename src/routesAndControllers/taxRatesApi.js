@@ -5,10 +5,13 @@ const {
   addTaxRate,
   changeTaxRate,
 } = require("../model/taxRates");
+const {
+  renderAllElements,
+  renderAddNewElement,
+  renderUpdateElement,
+} = require("./commonApi");
 const { extractErrors } = require("../utils/utils");
 const router = express.Router();
-
-const objFields = ["id", "name", "rate", "selected"];
 
 router.get("/tax-rates/all", renderAll);
 
@@ -32,11 +35,12 @@ router.post(
 router.patch(
   "/tax-rates/update",
   [
-    check("id").notEmpty().isInt().withMessage("Musisz podać nr id elementu!"),
+    check("id").isInt().withMessage("Musisz podać nr id elementu!"),
     check("name")
       .notEmpty()
+      .withMessage("Nazwa nie może być pusta!")
       .isLength({ max: 35 })
-      .withMessage("Nazwa nie może być pusta i dłuższa niż 35 znaków!"),
+      .withMessage("Nazwa nie może dłuższa niż 35 znaków!"),
     check("rate")
       .notEmpty()
       .isDecimal({ decimal_digits: 2, locale: "pl-PL" })
@@ -47,7 +51,7 @@ router.patch(
 
 router.delete(
   "/tax-rates/delete",
-  check("id").notEmpty().isInt().withMessage("Musisz podać nr id elementu!"),
+  check("id").isInt().withMessage("Musisz podać nr id elementu!"),
   renderRemove
 );
 
@@ -59,69 +63,15 @@ router.use("/tax-rates", (req, res, next) => {
 });
 
 function renderAll(req, res, next) {
-  getAllTaxRates()
-    .then((results) => {
-      res.status(200).json({ status: "ok", results });
-    })
-    .catch((err) => {
-      res.status(400).json({
-        status: "error",
-        error: err,
-      });
-    });
+  renderAllElements(req, res, next, getAllTaxRates);
 }
 
 function renderAddNew(req, res, next) {
-  const errors = validationResult(req).array();
-  if (errors.length === 0) {
-    addTaxRate(req.body)
-      .then(() => {
-        res.status(201).json({
-          status: "ok",
-          message: "Dodano element do tablicy stawki podatków!",
-        });
-      })
-      .catch((err) => {
-        res.status(400).json({
-          status: "error",
-          error: err,
-        });
-      });
-  } else {
-    const validationErrors = extractErrors(errors);
-    res.status(422).json({
-      status: "error",
-      msg: "Błąd walidacji danych!",
-      errors: validationErrors,
-    });
-  }
+  renderAddNewElement(req, res, next, addTaxRate);
 }
 
 function renderUpdate(req, res, next) {
-  const errors = validationResult(req).array();
-  if (errors.length === 0) {
-    const { id } = req.body;
-    changeTaxRate(id, { ...req.body })
-      .then(() => {
-        res.status(200).json({
-          status: "ok",
-          message: "Zmieniono wartość stawki podatku!",
-        });
-      })
-      .catch((err) => {
-        res.status(400).json({
-          status: "error",
-          error: err,
-        });
-      });
-  } else {
-    const validationErrors = extractErrors(errors);
-    res.status(422).json({
-      status: "error",
-      msg: "Błąd walidacji danych!",
-      errors: validationErrors,
-    });
-  }
+  renderUpdateElement(req, res, next, changeTaxRate);
 }
 
 function renderRemove(req, res, next) {
