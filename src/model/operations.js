@@ -31,7 +31,7 @@ function addOperation(operation) {
   return addElement(AddOperationQuery, values);
 }
 
-function removeBranch(id) {
+function removeOperation(id) {
   return removeElement(id, DeleteQuery);
 }
 
@@ -40,4 +40,5 @@ module.exports = {
   getAllOperations,
   addOperation,
   changeOperation,
+  removeOperation
 };

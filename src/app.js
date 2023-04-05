@@ -18,6 +18,12 @@ app.use('/api', taxRateRoutes);
 app.use('/api', branchesRoutes);
 app.use('/api', operationsRoutes);
 app.use('/api', clientsRoutes);
+app.use("/api", (req, res, next) => {
+    res.status(403).json({
+      status: "error",
+      msg: "Nieobsługiwana metoda lub ścieżka",
+    });
+  });
 
 app.use((err,req,res,next)=>{
     console.log(err);

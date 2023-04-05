@@ -3,15 +3,18 @@ const {
   getAllOperations,
   addOperation,
   changeOperation,
+  removeOperation,
+  getOperation,
+
 } = require("./../model/operations");
 const { check, validationResult } = require("express-validator");
-const { renderAllElements } = require("./commonApi");
+const { renderAllElements, renderRemoveElement, renderOneElement, renderUpdateElement } = require("./commonApi");
 const router = express.Router();
 
 router.get("/operations/all", renderAll);
 
 router.post(
-  "operations/add-new",
+  "/operations/add-new",
   [
     check("name")
       .notEmpty()
@@ -28,7 +31,7 @@ router.post(
 );
 
 router.patch(
-  "operations/update",
+  "/operations/update",
   [
     check("name")
       .notEmpty()
@@ -44,11 +47,9 @@ router.patch(
   renderUpdate
 );
 
-router.delete(
-  "operations/delete",
-  check("id").isInt().withMessage("Musisz podać nr id elementu!"),
-  renderRemove
-);
+router.get('/operations/elem/:id',renderOne)
+
+router.delete("operations/delete/:id",renderRemove);
 
 function renderAll(req, res, next) {
   renderAllElements(req, res, next, getAllOperations);
@@ -63,8 +64,13 @@ function renderUpdate(req, res, next) {
 }
 
 function renderRemove(req, res, next) {
-  console.log(req.body);
-  res.status(200).json({ message: "ok" });
+  renderRemoveElement(req,res,next,removeOperation);
 }
+
+function renderOne(req,res,next) {
+  renderOneElement(req,res,next,getOperation);
+}
+
+
 
 module.exports = router;

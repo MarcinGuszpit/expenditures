@@ -4,20 +4,12 @@ function renderAllElements(req, res, next, dataBasePromiseFunction) {
   dataBasePromiseFunction()
     .then((results) => {
       if (results.error) {
-        res.status(400).json({
-          status: "error",
-          message: "Błąd operacji w bazie danych!",
-        });
+        rednerError(res, 400, "Błąd operacji w bazie danych!");
       } else {
         res.status(200).json({ status: "ok", results });
       }
     })
-    .catch((err) => {
-      res.status(400).json({
-        status: "error",
-        message: "Wystąpił nieokreślony błąd bazy danych!",
-      });
-    });
+    .catch(err => rednerError(res, 400, "Wystąpił nieokreślony błąd bazy danych!"));
 }
 
 function renderAddNewElement(req, res, next, dataBasePromiseFunction) {
@@ -26,10 +18,7 @@ function renderAddNewElement(req, res, next, dataBasePromiseFunction) {
     dataBasePromiseFunction(req.body)
       .then((results) => {
         if (results.error) {
-          res.status(400).json({
-            status: "error",
-            message: "Błąd operacji w bazie danych!",
-          });
+          rednerError(res, 400, "Błąd operacji w bazie danych!");
         } else {
           res.status(201).json({
             status: "ok",
@@ -37,12 +26,7 @@ function renderAddNewElement(req, res, next, dataBasePromiseFunction) {
           });
         }
       })
-      .catch((err) => {
-        res.status(400).json({
-          status: "error",
-          message: "Wystąpił nieokreślony błąd bazy danych!",
-        });
-      });
+      .catch(err => rednerError(res, 400, "Wystąpił nieokreślony błąd bazy danych!"));
   } else {
     const validationErrors = extractErrors(errors);
     res.status(422).json({
@@ -60,10 +44,7 @@ function renderUpdateElement(req, res, next, dataBasePromiseFunction) {
     dataBasePromiseFunction(id, { ...req.body })
       .then((results) => {
         if (results.error) {
-          res.status(400).json({
-            status: "error",
-            message: "Błąd operacji w bazie danych!",
-          });
+          rednerError(res, 400, "Błąd operacji w bazie danych!");
         } else {
           res.status(200).json({
             status: "ok",
@@ -71,12 +52,7 @@ function renderUpdateElement(req, res, next, dataBasePromiseFunction) {
           });
         }
       })
-      .catch((err) => {
-        res.status(400).json({
-          status: "error",
-          message: "Wystąpił nieokreślony błąd bazy danych!",
-        });
-      });
+      .catch(err => rednerError(res, 400, "Wystąpił nieokreślony błąd bazy danych!"));
   } else {
     const validationErrors = extractErrors(errors);
     res.status(422).json({
@@ -87,8 +63,44 @@ function renderUpdateElement(req, res, next, dataBasePromiseFunction) {
   }
 }
 
+function renderOneElement(req, res, next, dataBasePromiseFunction) {
+  const id = req.params.id;
+  dataBasePromiseFunction(id).then((results) => {
+    if (results.error) {
+      rednerError(res, 400, "Błąd operacji w bazie danych!");
+    } else {
+      res.status(200).json({ status: "ok", results: results[0] });
+    }
+
+  }).catch(err => rednerError(res, 400, "Wystąpił nieokreślony błąd bazy danych!"));
+}
+
+
+function renderRemoveElement(req, res, next, dataBasePromiseFunction) {
+  const id = req.params.id;
+  dataBasePromiseFunction(id).then((results) => {
+    if (results.error) {
+      rednerError(res, 400, "Błąd operacji w bazie danych!");
+    } else {
+      res.status(201).json({ status: "ok", message: 'Usunięto element z bazy danych' });
+    }
+
+  }).catch(err => rednerError(res, 400, "Wystąpił nieokreślony błąd bazy danych!"));
+}
+
+
+function rednerError(res, status, msg) {
+  res.status(status).json({
+    status: "error",
+    message: msg,
+  });
+}
+
+
 module.exports = {
   renderAllElements,
   renderAddNewElement,
   renderUpdateElement,
+  renderRemoveElement,
+  renderOneElement
 };

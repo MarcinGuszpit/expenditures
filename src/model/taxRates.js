@@ -3,6 +3,7 @@ const {
   getAllElements,
   changeElement,
   addElement,
+  removeElement
 } = require("./commonDbModel");
 
 const TaxRateQuery = "SELECT * FROM TAX_RATES WHERE ID=?";
@@ -11,6 +12,8 @@ const AddTaxRateQuery =
   "INSERT INTO `TAX_RATES`(`NAME`, `RATE`, `SELECTED`) VALUES (?,?,?)";
 const UpdateTaxRateQuery =
   "UPDATE `TAX_RATES` SET `NAME`= ?,`RATE`= ?,`SELECTED`= ? WHERE ID = ?";
+
+const RemoveElementQuery = 'DELETE FROM `TAX_RATES` WHERE ID=?';
 
 function getTaxRate(id) {
   return getElement(id, TaxRateQuery);
@@ -30,9 +33,14 @@ function addTaxRate(taxRate) {
   return addElement(AddTaxRateQuery, values);
 }
 
+function removeTaxRate(id) {
+  return removeElement(id, RemoveElementQuery);
+}
+
 module.exports = {
   getTaxRate,
   getAllTaxRates,
   addTaxRate,
   changeTaxRate,
+  removeTaxRate
 };

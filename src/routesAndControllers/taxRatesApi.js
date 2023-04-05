@@ -4,16 +4,22 @@ const {
   getAllTaxRates,
   addTaxRate,
   changeTaxRate,
+  getTaxRate,
+  removeTaxRate
 } = require("../model/taxRates");
 const {
   renderAllElements,
   renderAddNewElement,
   renderUpdateElement,
+  renderOneElement, 
+  renderRemoveElement
 } = require("./commonApi");
 const { extractErrors } = require("../utils/utils");
 const router = express.Router();
 
 router.get("/tax-rates/all", renderAll);
+
+router.get('/tax-rates/elem/:id', renderOne);
 
 router.post(
   "/tax-rates/add-new",
@@ -50,17 +56,9 @@ router.patch(
 );
 
 router.delete(
-  "/tax-rates/delete",
-  check("id").isInt().withMessage("Musisz podać nr id elementu!"),
+  "/tax-rates/delete/:id",
   renderRemove
 );
-
-router.use("/tax-rates", (req, res, next) => {
-  res.status(403).json({
-    status: "error",
-    msg: "Nieobsługiwana metoda lub ścieżka",
-  });
-});
 
 function renderAll(req, res, next) {
   renderAllElements(req, res, next, getAllTaxRates);
@@ -75,7 +73,11 @@ function renderUpdate(req, res, next) {
 }
 
 function renderRemove(req, res, next) {
-  const errors = validationResult(req).array();
+  renderRemoveElement(req,res,next,removeTaxRate);
+}
+
+function renderOne(req, res, next) {
+  renderOneElement(req,res,next,getTaxRate);
 }
 
 module.exports = router;
