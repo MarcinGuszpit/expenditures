@@ -6,7 +6,7 @@ const {
   getBranch,
   removeBranch
 } = require("./../model/salesBranches");
-const { check, validationResult } = require("express-validator");
+const { check} = require("express-validator");
 const {
   renderAllElements,
   renderAddNewElement,

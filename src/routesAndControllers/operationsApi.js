@@ -7,7 +7,7 @@ const {
   getOperation,
 
 } = require("./../model/operations");
-const { check, validationResult } = require("express-validator");
+const { check} = require("express-validator");
 const { renderAllElements, renderRemoveElement, renderOneElement, renderUpdateElement } = require("./commonApi");
 const router = express.Router();
 
