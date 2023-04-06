@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Czas generowania: 30 Mar 2023, 14:38
+-- Czas generowania: 06 Kwi 2023, 15:15
 -- Wersja serwera: 5.5.68-MariaDB
 -- Wersja PHP: 7.4.9
 
@@ -29,15 +29,15 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `Clients` (
-  `ID` int(11) NOT NULL,
-  `Short_name` varchar(35) COLLATE utf8_polish_ci NOT NULL,
+  `id` int(11) NOT NULL,
+  `short_name` varchar(35) COLLATE utf8_polish_ci NOT NULL,
   `name1` varchar(65) COLLATE utf8_polish_ci DEFAULT NULL,
   `name2` varchar(65) COLLATE utf8_polish_ci DEFAULT NULL,
-  `PostalCode` varchar(5) COLLATE utf8_polish_ci DEFAULT NULL,
-  `CITY` varchar(35) COLLATE utf8_polish_ci DEFAULT NULL,
-  `STREET` varchar(35) COLLATE utf8_polish_ci DEFAULT NULL,
-  `NR_VAT` varchar(15) COLLATE utf8_polish_ci DEFAULT NULL,
-  `NR_REGON` varchar(15) COLLATE utf8_polish_ci DEFAULT NULL
+  `postal_code` varchar(5) COLLATE utf8_polish_ci DEFAULT NULL,
+  `city` varchar(35) COLLATE utf8_polish_ci DEFAULT NULL,
+  `street` varchar(35) COLLATE utf8_polish_ci DEFAULT NULL,
+  `nr_vat` varchar(15) COLLATE utf8_polish_ci DEFAULT NULL,
+  `nr_regon` varchar(15) COLLATE utf8_polish_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 -- --------------------------------------------------------
@@ -67,15 +67,15 @@ INSERT INTO `Operations` (`id`, `name`, `operation`) VALUES
 --
 
 CREATE TABLE `SALES_BRANCHES` (
-  `ID` int(11) NOT NULL,
-  `NAME` varchar(50) COLLATE utf8_polish_ci NOT NULL
+  `id` int(11) NOT NULL,
+  `name` varchar(50) COLLATE utf8_polish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 --
 -- Zrzut danych tabeli `SALES_BRANCHES`
 --
 
-INSERT INTO `SALES_BRANCHES` (`ID`, `NAME`) VALUES
+INSERT INTO `SALES_BRANCHES` (`id`, `name`) VALUES
 (48, 'Zużycie gazu'),
 (49, 'Zużycie dodatków krawieckich'),
 (50, 'Zużycie nadruków na dzianinie'),
@@ -129,17 +129,17 @@ INSERT INTO `SALES_BRANCHES` (`ID`, `NAME`) VALUES
 --
 
 CREATE TABLE `TAX_RATES` (
-  `ID` int(11) NOT NULL,
-  `NAME` varchar(35) COLLATE utf8_polish_ci NOT NULL,
-  `RATE` decimal(11,2) NOT NULL,
-  `SELECTED` tinyint(1) DEFAULT NULL
+  `id` int(11) NOT NULL,
+  `name` varchar(35) COLLATE utf8_polish_ci NOT NULL,
+  `rate` decimal(11,2) NOT NULL,
+  `selected` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 --
 -- Zrzut danych tabeli `TAX_RATES`
 --
 
-INSERT INTO `TAX_RATES` (`ID`, `NAME`, `RATE`, `SELECTED`) VALUES
+INSERT INTO `TAX_RATES` (`id`, `name`, `rate`, `selected`) VALUES
 (1, '23% stawka podatku', '23.00', 1),
 (2, '8% stawka obniżona', '8.00', 0),
 (3, '5% stawka obniżona', '5.00', 0),
@@ -152,16 +152,37 @@ INSERT INTO `TAX_RATES` (`ID`, `NAME`, `RATE`, `SELECTED`) VALUES
 --
 
 CREATE TABLE `TURNOVER` (
-  `ID` int(11) NOT NULL,
-  `DATE` date NOT NULL,
-  `NETTO` decimal(12,2) NOT NULL,
-  `VAT` decimal(12,2) NOT NULL,
-  `ID_TAX_RATE` int(11) NOT NULL,
-  `ID_CLIENT` int(11) NOT NULL,
-  `NUMER_FAKTURY` varchar(25) COLLATE utf8_polish_ci DEFAULT NULL,
-  `ID_OPERATION` int(11) NOT NULL,
-  `ID_sALE_BRANCH` int(11) NOT NULL
+  `id` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `netto` decimal(12,2) NOT NULL,
+  `vat` decimal(12,2) NOT NULL,
+  `id_tax_rate` int(11) NOT NULL,
+  `id_client` int(11) NOT NULL,
+  `doc_number` varchar(50) COLLATE utf8_polish_ci DEFAULT NULL,
+  `id_operation` int(11) NOT NULL,
+  `id_sale_branch` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `Users`
+--
+
+CREATE TABLE `Users` (
+  `id` int(11) NOT NULL,
+  `login` varchar(35) COLLATE utf8_polish_ci NOT NULL,
+  `password` text COLLATE utf8_polish_ci NOT NULL,
+  `name` varchar(35) COLLATE utf8_polish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+--
+-- Zrzut danych tabeli `Users`
+--
+
+INSERT INTO `Users` (`id`, `login`, `password`, `name`) VALUES
+(1, 'test', 'testhaslo', 'test_user'),
+(2, 'test2', '$2a$12$2jqNUP.hhURAzfki/wUW4.RF409YZDFxWnKjmvJvX3rem0P.42LZO', 'marcin');
 
 --
 -- Indeksy dla zrzutów tabel
@@ -171,7 +192,7 @@ CREATE TABLE `TURNOVER` (
 -- Indeksy dla tabeli `Clients`
 --
 ALTER TABLE `Clients`
-  ADD PRIMARY KEY (`ID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indeksy dla tabeli `Operations`
@@ -183,23 +204,29 @@ ALTER TABLE `Operations`
 -- Indeksy dla tabeli `SALES_BRANCHES`
 --
 ALTER TABLE `SALES_BRANCHES`
-  ADD PRIMARY KEY (`ID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indeksy dla tabeli `TAX_RATES`
 --
 ALTER TABLE `TAX_RATES`
-  ADD PRIMARY KEY (`ID`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indeksy dla tabeli `TURNOVER`
 --
 ALTER TABLE `TURNOVER`
-  ADD PRIMARY KEY (`ID`),
-  ADD KEY `FK_client` (`ID_CLIENT`),
-  ADD KEY `FK_TAX_RATE` (`ID_TAX_RATE`),
-  ADD KEY `FK_OPERATION` (`ID_OPERATION`),
-  ADD KEY `FK_SALE_BRANCH` (`ID_sALE_BRANCH`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_client` (`id_client`),
+  ADD KEY `FK_TAX_RATE` (`id_tax_rate`),
+  ADD KEY `FK_OPERATION` (`id_operation`),
+  ADD KEY `FK_SALE_BRANCH` (`id_sale_branch`);
+
+--
+-- Indeksy dla tabeli `Users`
+--
+ALTER TABLE `Users`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT dla zrzuconych tabel
@@ -209,7 +236,7 @@ ALTER TABLE `TURNOVER`
 -- AUTO_INCREMENT dla tabeli `Clients`
 --
 ALTER TABLE `Clients`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT dla tabeli `Operations`
@@ -221,19 +248,25 @@ ALTER TABLE `Operations`
 -- AUTO_INCREMENT dla tabeli `SALES_BRANCHES`
 --
 ALTER TABLE `SALES_BRANCHES`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT dla tabeli `TAX_RATES`
 --
 ALTER TABLE `TAX_RATES`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT dla tabeli `TURNOVER`
 --
 ALTER TABLE `TURNOVER`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT dla tabeli `Users`
+--
+ALTER TABLE `Users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
