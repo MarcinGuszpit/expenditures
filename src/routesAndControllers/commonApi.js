@@ -31,7 +31,7 @@ function renderAddNewElement(req, res, next, dataBasePromiseFunction) {
     const validationErrors = extractErrors(errors);
     res.status(422).json({
       status: "error",
-      msg: "Błąd walidacji danych!",
+      message: "Błąd walidacji danych!",
       errors: validationErrors,
     });
   }
@@ -57,7 +57,7 @@ function renderUpdateElement(req, res, next, dataBasePromiseFunction) {
     const validationErrors = extractErrors(errors);
     res.status(422).json({
       status: "error",
-      msg: "Błąd walidacji danych!",
+      message: "Błąd walidacji danych!",
       errors: validationErrors,
     });
   }

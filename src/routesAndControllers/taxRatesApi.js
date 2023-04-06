@@ -14,7 +14,7 @@ const {
   renderOneElement, 
   renderRemoveElement
 } = require("./commonApi");
-const { extractErrors } = require("../utils/utils");
+
 const router = express.Router();
 
 router.get("/tax-rates/all", renderAll);
