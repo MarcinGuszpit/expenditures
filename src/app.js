@@ -4,6 +4,7 @@ const taxRateRoutes = require('./routesAndControllers/taxRatesApi');
 const branchesRoutes = require('./routesAndControllers/salesBranchesApi');
 const operationsRoutes = require('./routesAndControllers/operationsApi');
 const clientsRoutes = require('./routesAndControllers/clientsApi');
+const usersRoutes = require('./routesAndControllers/usersApi');
 const authRoutes = require('./auth/auth').router;
 const app = express();
 
@@ -19,6 +20,7 @@ app.use('/api', taxRateRoutes);
 app.use('/api', branchesRoutes);
 app.use('/api', operationsRoutes);
 app.use('/api', clientsRoutes);
+app.use('/api',usersRoutes);
 app.use("/api", (req, res, next) => {
   res.status(403).json({
     status: "error",

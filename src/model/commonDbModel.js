@@ -46,6 +46,7 @@ function addElement(query, values) {
   return connectionPool
     .execute(query, [...values])
     .then((results) => {
+      console.log('executed succes');
       return results[0];
     })
     .catch((err) => {

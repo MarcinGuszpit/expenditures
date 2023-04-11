@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Czas generowania: 06 Kwi 2023, 15:15
+-- Czas generowania: 11 Kwi 2023, 07:28
 -- Wersja serwera: 5.5.68-MariaDB
--- Wersja PHP: 7.4.9
+-- Wersja PHP: 7.4.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -171,7 +171,7 @@ CREATE TABLE `TURNOVER` (
 
 CREATE TABLE `Users` (
   `id` int(11) NOT NULL,
-  `login` varchar(35) COLLATE utf8_polish_ci NOT NULL,
+  `login` varchar(255) COLLATE utf8_polish_ci DEFAULT NULL,
   `password` text COLLATE utf8_polish_ci NOT NULL,
   `name` varchar(35) COLLATE utf8_polish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
@@ -181,8 +181,10 @@ CREATE TABLE `Users` (
 --
 
 INSERT INTO `Users` (`id`, `login`, `password`, `name`) VALUES
-(1, 'test', 'testhaslo', 'test_user'),
-(2, 'test2', '$2a$12$2jqNUP.hhURAzfki/wUW4.RF409YZDFxWnKjmvJvX3rem0P.42LZO', 'marcin');
+(2, 'test2', '$2a$12$2jqNUP.hhURAzfki/wUW4.RF409YZDFxWnKjmvJvX3rem0P.42LZO', 'marcin'),
+(3, 'test', '$2a$12$odufVG54Z.DRgLCJfKBkWuGrIzlKZQ3BNYtTT/tiBToE5r3OSR/iq', 'test'),
+(5, 'test3', '$2a$12$EMeNB3r4xBdt1WsHiiXsZuazASHu/p.fzWalENGR8CCvoBnHkVIwq', 'test'),
+(7, 'test23', '$2a$12$RzhnZOQVESuV3u3XyW6pJ.25w5ffOr13vdX5S/R9LNsUrSoE2kNli', 'test');
 
 --
 -- Indeksy dla zrzutów tabel
@@ -226,7 +228,8 @@ ALTER TABLE `TURNOVER`
 -- Indeksy dla tabeli `Users`
 --
 ALTER TABLE `Users`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `login` (`login`);
 
 --
 -- AUTO_INCREMENT dla zrzuconych tabel
@@ -248,13 +251,13 @@ ALTER TABLE `Operations`
 -- AUTO_INCREMENT dla tabeli `SALES_BRANCHES`
 --
 ALTER TABLE `SALES_BRANCHES`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
 
 --
 -- AUTO_INCREMENT dla tabeli `TAX_RATES`
 --
 ALTER TABLE `TAX_RATES`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT dla tabeli `TURNOVER`
@@ -266,7 +269,7 @@ ALTER TABLE `TURNOVER`
 -- AUTO_INCREMENT dla tabeli `Users`
 --
 ALTER TABLE `Users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

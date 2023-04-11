@@ -7,10 +7,8 @@ const {
 
 const OperationQuery = "SELECT * FROM Operations WHERE ID=?";
 const AllOperationsQuery = "SELECT * FROM `Operations`";
-const AddOperationQuery =
-  "INSERT INTO `OPERATIONS`(`NAME`, `OPERATION`) VALUES (?,?)";
-const UpdateOperationQuery =
-  "UPDATE `Operations` SET `name`=?,`operation`=? WHERE ID=?";
+const AddOperationQuery = "INSERT INTO `Operations`(`NAME`, `OPERATION`) VALUES (?,?)";
+const UpdateOperationQuery = "UPDATE `Operations` SET `name`=?,`operation`=? WHERE ID=?";
 const DeleteQuery = "DELETE FROM `Operations` WHERE ID=?";
 
 function getOperation(id) {
