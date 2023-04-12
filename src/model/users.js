@@ -11,7 +11,7 @@ const {
 const RemoveQuery = "DELETE FROM `Users` WHERE id = ?";
 const AllUsersQuery = "SELECT `id`, `login`, `name` FROM `Users`";
 const AddUserQuery = "INSERT INTO `Users`(`login`, `password`, `name`) VALUES (?,?,?)";
-const UpdateUserQuery = "";
+const UpdateUserQuery = "UPDATE `Users` SET `password`=?,`name`=? WHERE ID=?";
 const FindUserByLogin = "SELECT * FROM `Users` WHERE login = ?";
 
 
@@ -33,6 +33,35 @@ function addUser(user) {
         }
     }).catch((err) => {
           return {
+            msg,
+            error: err,
+          };
+    })
+}
+
+function updateUser(userWithOldPassword) {
+    let msg = ''
+    return findUserByLogin(user).then((results)=>{
+        if(results && results[0]) {
+            const userFromDb = results[0];
+            return bcrypt.compare(user.old_password, userFromDb.password).then((isEqual)=>{
+                if (isEqual) {
+                    const id = userWithOldPassword.id;
+                    const values = [userWithOldPassword.password, userWithOldPassword.name];
+                    return changeElement(UpdateUserQuery,id,values);
+                } else {
+                    msg = 'Stare hasło nie zgadza się!. Błąd logowania!' ;
+                    throw new Error('Błąd logowania');           
+                }
+            });
+
+        }
+        else {
+            msg = 'Użytkownik o danym loginie nie istnieje w bazie danych!';
+            throw new Error('Użytkownik nie istnieje');
+        }
+    }).catch((err)=>{
+        return {
             msg,
             error: err,
           };
@@ -85,5 +114,6 @@ module.exports = {
     addUser,
     isUserAuthenticated,
     removeUser,
-    getAllUsers
+    getAllUsers,
+    updateUser
 }
